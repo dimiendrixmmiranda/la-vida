@@ -12,7 +12,7 @@ import { Accordion, AccordionTab } from 'primereact/accordion';
 import { faq } from "@/lib/constants/faq";
 import Onda from "@/components/onda/Onda";
 import RedesSociaisAlternativo from "@/components/redesSociais/RedesSociaisAlternativo";
-
+//novo teste aqui
 export default async function Page() {
 	return (
 		<Template>
