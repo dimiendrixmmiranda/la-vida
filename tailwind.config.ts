@@ -16,6 +16,7 @@ export default {
   			["amarelo-claro"]: 'var(--amarelo-claro)',
   			["azul-escuro"]: 'var(--azul-escuro)',
   			["azul-medio"]: 'var(--azul-medio)',
+  			["azul-medio-fraco"]: 'var(--azul-medio-fraco)',
   			azul: 'var(--azul)',
   			laranja: 'var(--laranja)',
   			preto: 'var(--preto)',

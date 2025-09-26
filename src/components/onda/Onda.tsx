@@ -5,7 +5,7 @@ interface OndaProps {
 
 export default function Onda({ invertido, primeiraOnda }: OndaProps) {
     return (
-        <div className={`relative w-full overflow-hidden leading-none ${primeiraOnda ? '-mt-20 lg:-mt-24' : ''}`}>
+        <div className={`relative w-full overflow-hidden leading-none ${primeiraOnda ? '-mt-20 lg:-mt-24' : '-mt-1'}`}>
             <svg
                 className={`block w-full h-20 md:h-32 lg:h-40 ${invertido ? 'rotate-180' : 'rotate-0'}`}
                 xmlns="http://www.w3.org/2000/svg"

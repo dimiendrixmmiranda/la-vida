@@ -17,6 +17,7 @@
   --azul-escuro: #011024;
   --azul: #144c96;
   --azul-medio: #002278;
+  --azul-medio-fraco: #133794;
   --magenta: #ff204e;
   --laranja: #FF693A;
   --amarelo: #DC7C15;
@@ -36,6 +37,16 @@ body {
 .p-accordion-header,
 .p-accordion-header-link {
   height: 75px !important;
+}
+
+.swiper-slide{
+  display: flex!important;
+  justify-content: center!important;
+  margin: 0!important;
+}
+.swiper-wrapper{
+  display: flex!important;
+  gap: 1em!important;
 }
 
 .p-accordion-toggle-icon {
@@ -84,4 +95,14 @@ body {
     font-size: 1.25rem!important;
     line-height: 1.75rem!important;
   }
+}
+
+.faq .p-accordion-header-link{
+  background-color: var(--azul-medio)!important;
+  color: white!important;
+}
+
+.faq .p-accordion-content{
+  background-color: var(--azul-medio-fraco)!important;
+  color: white!important;
 }

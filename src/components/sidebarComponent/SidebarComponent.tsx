@@ -34,8 +34,8 @@ export default function SidebarComponent() {
         },
         { label: "Preços", icon: <FaMoneyBillWave />, href: "/" },
         { label: "Agendamento/Solicite Coleta", icon: <AiTwotoneSchedule />, href: "/" },
-        { label: "Contato", icon: <MdContactPhone />, href: "/" },
-        { label: "FAQ", icon: <FaQuestionCircle />, href: "/" },
+        { label: "Contato", icon: <MdContactPhone />, href: "#contatos" },
+        { label: "FAQ", icon: <FaQuestionCircle />, href: "#faq" },
     ]
 
     // Header genérico para itens do Accordion
@@ -60,40 +60,42 @@ export default function SidebarComponent() {
                 header={<h2 className='text-3xl font-bold'>Menu</h2>}
                 className='w-[95%] max-w-[400px]'
             >
-                <div className="flex flex-col relative">
-                    {menuItems.map((item, idx) =>
-                        item.children ? (
-                            <Accordion key={idx} className='sidebarMobile p-2'>
-                                <AccordionTab headerTemplate={() => accordionHeader(item)}>
-                                    <ul className="flex flex-col gap-2 pl-4">
-                                        {item.children.map((subItem, subIdx) => (
-                                            <li key={subIdx}>
-                                                <Link
-                                                    href={subItem.href}
-                                                    className="block p-2 hover:bg-red-300 rounded"
-                                                    onClick={() => setVisibleRight(false)}
-                                                >
-                                                    {subItem.label}
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </AccordionTab>
-                            </Accordion>
-                        ) : (
-                            <Link
-                                key={idx}
-                                href={item.href}
-                                className="text-[1em] p-2 flex items-center gap-2 font-bold sm:text-xl"
-                                onClick={() => setVisibleRight(false)}
-                            >
-                                {item.icon}{item.label}
-                            </Link>
-                        )
-                    )}
-                </div>
-                <div className='absolute bottom-6 left-0 w-full'>
-                    <RedesSociais mobile={true}/>
+                <div className='flex flex-col h-full md:px-4'>
+                    <div className="flex flex-col relative">
+                        {menuItems.map((item, idx) =>
+                            item.children ? (
+                                <Accordion key={idx} className='sidebarMobile p-2'>
+                                    <AccordionTab headerTemplate={() => accordionHeader(item)}>
+                                        <ul className="flex flex-col gap-2 pl-4">
+                                            {item.children.map((subItem, subIdx) => (
+                                                <li key={subIdx}>
+                                                    <Link
+                                                        href={subItem.href}
+                                                        className="block p-2 hover:bg-red-300 rounded"
+                                                        onClick={() => setVisibleRight(false)}
+                                                    >
+                                                        {subItem.label}
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </AccordionTab>
+                                </Accordion>
+                            ) : (
+                                <Link
+                                    key={idx}
+                                    href={item.href}
+                                    className="text-[1em] p-2 flex items-center gap-2 font-bold sm:text-xl"
+                                    onClick={() => setVisibleRight(false)}
+                                >
+                                    {item.icon}{item.label}
+                                </Link>
+                            )
+                        )}
+                    </div>
+                    <div className='mt-auto'>
+                        <RedesSociais mobile={true} />
+                    </div>
                 </div>
             </Sidebar>
         </div>

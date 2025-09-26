@@ -11,21 +11,20 @@ import { MdContactPhone, MdMiscellaneousServices } from "react-icons/md";
 export default function Cabecalho() {
     const menuItems = [
         { label: "Home", icon: <FaHouseChimney />, href: "/" },
-        { label: "Serviços", icon: <MdMiscellaneousServices />, href: "/" },
-        // {
-        //     label: "Serviços", icon: <MdMiscellaneousServices />, children: [
-        //         { label: "Lavagem", href: "/" },
-        //         { label: "Secagem", href: "/" },
-        //         { label: "Passadoria", href: "/" },
-        //         { label: "Combos", href: "/" },
-        //         { label: "Planos Mensais", href: "/" },
-        //         { label: "Coleta e Entrega", href: "/" },
-        //     ]
-        // },
+        {
+            label: "Serviços", icon: <MdMiscellaneousServices />, children: [
+                { label: "Lavagem", href: "/" },
+                { label: "Secagem", href: "/" },
+                { label: "Passadoria", href: "/" },
+                { label: "Combos", href: "/" },
+                { label: "Planos Mensais", href: "/" },
+                { label: "Coleta e Entrega", href: "/" },
+            ]
+        },
         { label: "Preços", icon: <FaMoneyBillWave />, href: "/" },
         { label: "Agendamento/Solicite Coleta", icon: <AiTwotoneSchedule />, href: "/" },
-        { label: "Contato", icon: <MdContactPhone />, href: "/" },
-        { label: "FAQ", icon: <FaQuestionCircle />, href: "/" },
+        { label: "Contato", icon: <MdContactPhone />, href: "#contato" },
+        { label: "FAQ", icon: <FaQuestionCircle />, href: "#faq" },
     ]
     return (
         <header className="absolute top-0 left-0 w-full z-10 p-2 flex text-white xl:p-4">
@@ -35,25 +34,50 @@ export default function Cabecalho() {
                 </div>
                 <h1 className="font-cursiva font-black text-5xl mt-2">La Vida</h1>
             </div>
-            <div className="hidden gap-2 lg:flex lg:flex-1 lg:justify-center">
-                {menuItems.map((item, idx) => {
-                    return (
-                        <Link
-                            key={idx}
-                            href={item.href}
-                            className="h-fit self-center p-2 flex items-center gap-2 font-bold transition-all duration-300 hover:bg-azul-escuro 2xl:text-xl"
-                        >
-                            {item.icon}{item.label}
-                        </Link>
-                    )
-                })}
-
-
-            </div>
+            <nav className="hidden gap-2 h-fit my-auto lg:flex lg:flex-1 lg:justify-center">
+                {menuItems.map((item, idx) => (
+                    <div key={idx} className="relative group h-fit">
+                        {/* Link principal */}
+                        {!item.children ? (
+                            <Link
+                                href={item.href || "/"}
+                                className="h-fit self-center p-2 flex items-center gap-2 font-bold transition-all duration-300 hover:bg-azul-escuro 2xl:text-xl"
+                            >
+                                {item.icon}
+                                {item.label}
+                            </Link>
+                        ) : (
+                            <>
+                                <button
+                                    className="h-fit self-center p-2 flex items-center gap-2 font-bold transition-all duration-300 hover:bg-azul-escuro 2xl:text-xl"
+                                >
+                                    {item.icon}
+                                    {item.label}
+                                </button>
+                                {/* Dropdown */}
+                                <div className="absolute left-0  hidden group-hover:block bg-azul-escuro rounded-lg shadow-lg">
+                                    <ul className="flex flex-col">
+                                        {item.children.map((child, cidx) => (
+                                            <li key={cidx}>
+                                                <Link
+                                                    href={child.href}
+                                                    className="block px-4 py-2 hover:bg-azul-medio whitespace-nowrap"
+                                                >
+                                                    {child.label}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ))}
+            </nav>
             <div className="flex self-center">
-                <RedesSociais mobile={false}/>
+                <RedesSociais mobile={false} />
             </div>
             <SidebarComponent />
-        </header>
+        </header >
     )
 }

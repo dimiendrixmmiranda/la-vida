@@ -1,6 +1,6 @@
 export default function Rodape(){
     return (
-        <footer>
+        <footer className="bg-azul-medio">
             Rodape
         </footer>
     )

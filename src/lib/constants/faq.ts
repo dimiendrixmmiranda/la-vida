@@ -4,8 +4,8 @@ const faq = [
         resposta: "O ciclo completo de lavagem leva em média 30 minutos e a secagem cerca de 35 minutos."
     },
     {
-        pergunta: "Como funciona a lavô? o que é auto serviço?",
-        resposta: "A Lavô funciona no formato de autoatendimento: você mesmo coloca as roupas na máquina, escolhe o ciclo desejado, realiza o pagamento e acompanha o processo no local."
+        pergunta: "Como funciona a La Vida? o que é auto serviço?",
+        resposta: "A La Vida funciona no formato de autoatendimento: você mesmo coloca as roupas na máquina, escolhe o ciclo desejado, realiza o pagamento e acompanha o processo no local."
     },
     {
         pergunta: "Qual é a capacidade máxima por máquina?",
