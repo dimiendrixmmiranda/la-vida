@@ -1,0 +1,208 @@
+.buttons {
+    margin-top: 50px;
+    text-align: center;
+    border-radius: 30px;
+}
+
+.blob-btn {
+    z-index: 1;
+    position: relative;
+    padding: 1em;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    transition: color 0.5s;
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+.blob-btn:before {
+    content: "";
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #0505a9;
+    border-radius: 30px;
+}
+
+.blob-btn:after {
+    content: "";
+    z-index: -2;
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s 0.2s;
+    border-radius: 30px;
+}
+
+.blob-btn:hover {
+    color: #ffffff;
+    border-radius: 30px;
+}
+
+.blob-btn:hover:after {
+    transition: all 0.3s;
+    left: 0;
+    top: 0;
+    border-radius: 30px;
+}
+
+.blob-btn__inner {
+    z-index: -1;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    background: #ffffff;
+}
+
+.blob-btn__blobs {
+    position: relative;
+    display: block;
+    height: 100%;
+    filter: url('#goo');
+}
+
+.blob-btn__blob {
+    position: absolute;
+    top: 2px;
+    width: 25%;
+    /* 100% / 4 blobs */
+    height: 100%;
+    /* background: #0505a9; */
+    border-radius: 100%;
+    transform: translate3d(0, 150%, 0) scale(1.7);
+    transition: transform 0.45s;
+}
+
+@supports (filter: url('#goo')) {
+    .blob-btn__blob {
+        transform: translate3d(0, 150%, 0) scale(1.4);
+    }
+}
+
+.blob-btn__blob:nth-child(1) {
+    left: 0;
+    transition-delay: 0s;
+}
+
+.blob-btn__blob:nth-child(2) {
+    left: 30%;
+    transition-delay: 0.08s;
+}
+
+.blob-btn__blob:nth-child(3) {
+    left: 60%;
+    transition-delay: 0.16s;
+}
+
+.blob-btn__blob:nth-child(4) {
+    left: 90%;
+    transition-delay: 0.24s;
+}
+
+.blob-btn:hover .blob-btn__blob {
+    transform: translateZ(0) scale(1.7);
+}
+
+@supports (filter: url('#goo')) {
+    .blob-btn:hover .blob-btn__blob {
+        transform: translateZ(0) scale(1.4);
+    }
+}
+
+.facebook {
+    color: #1877f2;
+}
+
+.facebook:before {
+    border-color: #1877f2;
+}
+
+.facebook .blob-btn__blob {
+    background: #1877f2;
+}
+
+.instagram {
+    color: #e1306c;
+}
+
+.instagram:before {
+    border-color: #e1306c;
+}
+
+.instagram .blob-btn__blob {
+    background: #e1306c;
+}
+
+.tiktok {
+    color: #010101;
+}
+
+.tiktok:before {
+    border-color: #010101;
+}
+
+.tiktok .blob-btn__blob {
+    background: #010101;
+}
+
+.whatsapp {
+    color: #15DB3F;
+}
+
+.whatsapp:before {
+    border-color: #15DB3F;
+}
+
+.whatsapp .blob-btn__blob {
+    background: #15DB3F;
+}
+
+.github {
+    color: #080808;
+}
+
+.github:before {
+    border-color: #080808;
+}
+
+.github .blob-btn__blob {
+    background: #080808;
+}
+
+.linkedin {
+    color: #126BC4;
+}
+
+.linkedin:before {
+    border-color: #126BC4;
+}
+
+.linkedin .blob-btn__blob {
+    background: #126BC4;
+}
+
+.email {
+    color: #FBB02E;
+}
+
+.email:before {
+    border-color: #FBB02E;
+}
+
+.email .blob-btn__blob {
+    background: #FBB02E;
+}

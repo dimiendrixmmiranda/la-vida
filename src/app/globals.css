@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Bangers&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Birthstone&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+
+  /* Fontes */
+  --fonte-primaria: "Open Sans", sans-serif;
+  --fonte-secundaria: "Lato", sans-serif;
+  --fonte-terciaria: "Bangers", system-ui;
+  --fonte-cursiva: "Birthstone", cursive;
+
+  /* Cores */
+  --azul-escuro: #011024;
+  --azul: #144c96;
+  --azul-medio: #002278;
+  --magenta: #ff204e;
+  --laranja: #FF693A;
+  --amarelo: #DC7C15;
+  --preto: #1d1e22;
+  --amarelo-claro: #ffb037;
+  --turquesaEscuro: #005d71;
+  --turquesaClaro: #68c9da;
+  --turquesaMedio: #1c9dac;
+  --salmao: #f8726b;
+}
+
+body {
+  scroll-behavior: smooth;
+}
+
+.p-accordion-header,
+.p-accordion-header,
+.p-accordion-header-link {
+  height: 75px !important;
+}
+
+.p-accordion-toggle-icon {
+  display: none !important;
+}
+.faq .p-accordion-toggle-icon {
+  display: block !important;
+}
+
+.p-sidebar {
+  background-color: var(--azul-medio)!important;
+  color: white;
+}
+.sidebarMobile .p-accordion-header-link {
+  padding: .8em !important;
+  height: fit-content !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: 1em !important;
+  width: 100% !important;
+  background-color: var(--azul-medio)!important;
+}
+.sidebarMobile .p-accordion-content{
+  margin-top: .5em;
+}
+
+.sidebarMobile .p-accordion-header {
+  height: fit-content !important;
+}
+
+.sidebarMobile .p-accordion-tab {
+  margin: 0 !important;
+}
+
+@media screen and (min-width:1024px) {
+
+  .p-accordion-header,
+  .p-accordion-header,
+  .p-accordion-header-link {
+    height: 60px !important;
+  }
+}
+
+@media screen and (min-width:425px) {
+  .sidebarMobile .p-accordion-header-link {
+    font-size: 1.25rem!important;
+    line-height: 1.75rem!important;
+  }
+}
