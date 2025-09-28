@@ -2,13 +2,18 @@ import Image from "next/image";
 import Onda from "../onda/Onda";
 import RedesSociaisAlternativo from "../redesSociais/RedesSociaisAlternativo";
 import MapaWrapper from "./MapaWrapper";
+import { FaMapLocationDot } from "react-icons/fa6";
 
-export default function Contato() {
+interface ContatoProps {
+    telaInicial: boolean
+}
+
+export default function Contato({ telaInicial }: ContatoProps) {
     const position: [number, number] = [-23.498266207837037, -49.92588432309148]
 
     return (
         <>
-            <div className="min-h-screen bg-azul-medio text-white p-4 flex flex-col gap-4 justify-center items-center md:p-8 lg:gap-8" id="contato">
+            <div className={`min-h-screen text-white p-4 flex flex-col gap-4 justify-center items-center md:p-8 lg:gap-8 ${telaInicial ? 'bg-azul-medio': ''}`} id="contato">
                 <div className="flex flex-col justify-center items-center font-primaria">
                     <h2 className="text-4xl uppercase font-black sm:text-6xl lg:text-[7em]">Vamos</h2>
                     <h3 className="text-4xl uppercase font-black text-transparent sm:text-6xl lg:text-[7em]" style={{ WebkitTextStroke: '2px white' }}>Conversar?</h3>
@@ -20,15 +25,23 @@ export default function Contato() {
                     <RedesSociaisAlternativo />
                 </div>
                 <div className="flex flex-col justify-center items-center gap-6 w-full h-full max-w-[1200px] mx-auto md:grid md:grid-cols-2 xl:grid-cols-3">
-                    <div className="w-[300px] h-[300px] relative justify-self-center lg:w-[340px] lg:h-[340px] xl:w-[380px] xl:h-[380px]">
+                    <div className="w-[300px] h-[300px] relative justify-self-center lg:w-[340px] lg:h-[340px] xl:w-[400px] xl:h-[400px] xl:row-start-1 xl:row-end-3">
                         <Image alt="visita" src={'/visita.png'} fill className="object-contain" />
                     </div>
-                    <div className="w-[300px] h-[300px] relative justify-self-center lg:w-full lg:h-[350px] xl:col-start-2 xl:col-end-4 xl:h-[400px]">
+                    <div className="w-[300px] h-[300px] relative justify-self-center lg:w-full lg:h-[350px] xl:col-start-2 xl:col-end-4 xl:h-[350px]">
                         <MapaWrapper position={position} />
+                    </div>
+                    <div className="grid grid-cols-[40px_1fr] justify-center items-center justify-self-center md:col-start-1 md:col-end-4 xl:col-start-2 xl:col-end-4 xl:-mt-4">
+                        <FaMapLocationDot className="text-3xl my-auto" />
+                        <p className="uppercase font-secundaria font-black leading-5">Avenida Getúlio Vargas, nº 1011, Centro - Próximo a Sanepar</p>
                     </div>
                 </div>
             </div>
-            <Onda invertido={false} />
+            {
+                telaInicial ? (
+                    <Onda invertido={false} />
+                ) : ('')
+            }
         </>
     )
 }

@@ -4,11 +4,8 @@ import { Button } from 'primereact/button';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import Link from 'next/link';
-import { MdContactPhone, MdMiscellaneousServices } from 'react-icons/md';
-import { FaMoneyBillWave, FaQuestionCircle } from 'react-icons/fa';
-import { AiTwotoneSchedule } from "react-icons/ai";
-import { FaHouseChimney } from "react-icons/fa6";
 import RedesSociais from '../redesSociais/RedesSociais';
+import menuItems from '@/lib/constants/menuItems';
 
 interface MenuItem {
     label: string
@@ -19,24 +16,6 @@ interface MenuItem {
 
 export default function SidebarComponent() {
     const [visibleRight, setVisibleRight] = useState(false);
-
-    const menuItems = [
-        { label: "Home", icon: <FaHouseChimney />, href: "/" },
-        {
-            label: "Serviços", icon: <MdMiscellaneousServices />, children: [
-                { label: "Lavagem", href: "/" },
-                { label: "Secagem", href: "/" },
-                { label: "Passadoria", href: "/" },
-                { label: "Combos", href: "/" },
-                { label: "Planos Mensais", href: "/" },
-                { label: "Coleta e Entrega", href: "/" },
-            ]
-        },
-        { label: "Preços", icon: <FaMoneyBillWave />, href: "/" },
-        { label: "Agendamento/Solicite Coleta", icon: <AiTwotoneSchedule />, href: "/" },
-        { label: "Contato", icon: <MdContactPhone />, href: "#contatos" },
-        { label: "FAQ", icon: <FaQuestionCircle />, href: "#faq" },
-    ]
 
     // Header genérico para itens do Accordion
     const accordionHeader = (item: MenuItem) => (

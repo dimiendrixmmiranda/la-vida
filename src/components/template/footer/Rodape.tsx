@@ -1,7 +1,12 @@
-export default function Rodape(){
+import Onda from "@/components/onda/Onda";
+
+export default function Rodape() {
     return (
-        <footer className="bg-azul-medio">
-            Rodape
-        </footer>
+        <>
+            <Onda invertido={true} />
+            <footer className="bg-azul-medio flex justify-center items-center text-white">
+                Desenvolvido por Dimi Endrix Martins Miranda
+            </footer>
+        </>
     )
 }

@@ -16,8 +16,8 @@ export default async function Page() {
 			<Vantagens />
 			<Servicos />
 			<Fundadores />
-			<Contato />
-			<FAQ />
+			<Contato telaInicial={true} />
+			<FAQ telaInicial={true} />
 		</Template>
 	)
 }

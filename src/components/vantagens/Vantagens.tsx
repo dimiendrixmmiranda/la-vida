@@ -3,8 +3,7 @@ import { RiScalesLine } from "react-icons/ri";
 import { Gradiente } from "@/components/gradiente/Gradiente";
 import { GiClothes, GiWashingMachine } from "react-icons/gi";
 import { MdBlockFlipped, MdIron } from "react-icons/md";
-import { FaAdjust, FaCalendarAlt, FaFeatherAlt, FaShieldAlt, FaShoppingBasket, FaTshirt, FaWhatsapp } from "react-icons/fa";
-import Link from "next/link";
+import { FaAdjust, FaCalendarAlt, FaFeatherAlt, FaShieldAlt, FaShoppingBasket, FaTshirt } from "react-icons/fa";
 import Onda from "../onda/Onda";
 export default function Vantagens() {
     return (
@@ -194,9 +193,6 @@ export default function Vantagens() {
                                 </li>
                             </Gradiente>
                         </ul>
-                    </div>
-                    <div className="flex justify-center items-center bg-green-600 text-white py-2 text-xl uppercase font-bold max-w-[450px] w-full mx-auto transition-all duration-300 hover:scale-[1.1]">
-                        <Link href={'/'} className="px-2 grid grid-cols-[40px_1fr] gap-1"><FaWhatsapp className="my-auto mx-auto text-3xl" />Entre Em Contato com Agente!</Link>
                     </div>
                 </div>
             </div>

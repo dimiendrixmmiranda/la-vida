@@ -1,83 +1,82 @@
 'use client'
+import { usePathname } from "next/navigation";
 import RedesSociais from "@/components/redesSociais/RedesSociais";
 import SidebarComponent from "@/components/sidebarComponent/SidebarComponent";
+import menuItems from "@/lib/constants/menuItems";
 import Image from "next/image";
 import Link from "next/link";
-import { AiTwotoneSchedule } from "react-icons/ai";
-import { FaMoneyBillWave, FaQuestionCircle } from "react-icons/fa";
-import { FaHouseChimney } from "react-icons/fa6";
-import { MdContactPhone, MdMiscellaneousServices } from "react-icons/md";
 
 export default function Cabecalho() {
-    const menuItems = [
-        { label: "Home", icon: <FaHouseChimney />, href: "/" },
-        {
-            label: "Serviços", icon: <MdMiscellaneousServices />, children: [
-                { label: "Lavagem", href: "/" },
-                { label: "Secagem", href: "/" },
-                { label: "Passadoria", href: "/" },
-                { label: "Combos", href: "/" },
-                { label: "Planos Mensais", href: "/" },
-                { label: "Coleta e Entrega", href: "/" },
-            ]
-        },
-        { label: "Preços", icon: <FaMoneyBillWave />, href: "/" },
-        { label: "Agendamento/Solicite Coleta", icon: <AiTwotoneSchedule />, href: "/" },
-        { label: "Contato", icon: <MdContactPhone />, href: "#contato" },
-        { label: "FAQ", icon: <FaQuestionCircle />, href: "#faq" },
-    ]
+    const pathname = usePathname();
+
+    // Tabela de regras de redirecionamento
+    const specialLinks: Record<string, { home: string; other: string }> = {
+        FAQ: { home: "#faq", other: "/faq" },
+        Contato: { home: "#contato", other: "/contato" },
+        // você pode adicionar mais aqui
+        // Exemplo: "Serviços": { home: "#servicos", other: "/servicos" }
+    };
+
     return (
         <header className="absolute top-0 left-0 w-full z-10 p-2 flex text-white xl:p-4">
-            <div className="flex items-center gap-2 flex-1 lg:flex-none">
+            <Link href={'/'} className="flex items-center gap-2 flex-1 lg:flex-none">
                 <div className="w-12 h-12 relative">
-                    <Image alt="Logo da Lavanderia La Vida" src={'/logo-la-vida.png'} fill className="object-contain" />
+                    <Image alt="Logo da Lavanderia La Vida" src={'/logo-la-vida-header.png'} fill className="object-contain" />
                 </div>
-                <h1 className="font-cursiva font-black text-5xl mt-2">La Vida</h1>
-            </div>
-            <nav className="hidden gap-2 h-fit my-auto lg:flex lg:flex-1 lg:justify-center">
-                {menuItems.map((item, idx) => (
-                    <div key={idx} className="relative group h-fit">
-                        {/* Link principal */}
-                        {!item.children ? (
-                            <Link
-                                href={item.href || "/"}
-                                className="h-fit self-center p-2 flex items-center gap-2 font-bold transition-all duration-300 hover:bg-azul-escuro 2xl:text-xl"
-                            >
-                                {item.icon}
-                                {item.label}
-                            </Link>
-                        ) : (
-                            <>
-                                <button
-                                    className="h-fit self-center p-2 flex items-center gap-2 font-bold transition-all duration-300 hover:bg-azul-escuro 2xl:text-xl"
+                <h1 className="font-cursiva font-black text-5xl" style={{ textShadow: '0 0 3px black' }}>La Vida</h1>
+            </Link>
+
+            <nav className="hidden gap-1 h-fit my-auto z-40 lg:flex lg:flex-1 lg:justify-center xl:gap-2">
+                {menuItems.map((item, idx) => {
+                    // Se o item estiver na tabela, aplica a regra
+                    const rule = specialLinks[item.label];
+                    const href = rule
+                        ? pathname === "/" ? rule.home : rule.other
+                        : item.href;
+
+                    return (
+                        <div key={idx} className="relative group h-fit">
+                            {!item.children ? (
+                                <Link
+                                    href={href || "/"}
+                                    className="h-fit self-center text-sm p-2 flex items-center gap-2 font-bold transition-all duration-300 hover:bg-azul-escuro xl:text-base 2xl:text-lg"
                                 >
                                     {item.icon}
                                     {item.label}
-                                </button>
-                                {/* Dropdown */}
-                                <div className="absolute left-0  hidden group-hover:block bg-azul-escuro rounded-lg shadow-lg">
-                                    <ul className="flex flex-col">
-                                        {item.children.map((child, cidx) => (
-                                            <li key={cidx}>
-                                                <Link
-                                                    href={child.href}
-                                                    className="block px-4 py-2 hover:bg-azul-medio whitespace-nowrap"
-                                                >
-                                                    {child.label}
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                ))}
+                                </Link>
+                            ) : (
+                                <>
+                                    <button
+                                        className="h-fit self-center text-sm p-2 flex items-center gap-2 font-bold transition-all duration-300 hover:bg-azul-escuro xl:text-base 2xl:text-lg"
+                                    >
+                                        {item.icon}
+                                        {item.label}
+                                    </button>
+                                    <div className="absolute left-0 hidden group-hover:block bg-azul-escuro rounded-lg shadow-lg z-40">
+                                        <ul className="flex flex-col">
+                                            {item.children.map((child, cidx) => (
+                                                <li key={cidx}>
+                                                    <Link
+                                                        href={child.href}
+                                                        className="block px-4 py-2 hover:bg-azul-medio whitespace-nowrap z-40"
+                                                    >
+                                                        {child.label}
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )
+                })}
             </nav>
+
             <div className="flex self-center">
                 <RedesSociais mobile={false} />
             </div>
             <SidebarComponent />
-        </header >
+        </header>
     )
 }
