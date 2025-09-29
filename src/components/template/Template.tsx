@@ -3,8 +3,9 @@ import Cabecalho from "./header/Cabecalho";
 import Main from "./main/Main";
 interface TemplateProps {
     children: React.ReactNode
+    ondaInvertida: boolean
 }
-export default function Template({children}:TemplateProps){
+export default function Template({children, ondaInvertida}:TemplateProps){
     return (
         <>
             <Cabecalho/>
@@ -13,7 +14,7 @@ export default function Template({children}:TemplateProps){
                     children
                 }
             </Main>
-            <Rodape/>
+            <Rodape ondaInvertida={ondaInvertida} />
         </>
     )
 }

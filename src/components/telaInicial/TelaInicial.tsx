@@ -34,6 +34,9 @@ export default function TelaInicial() {
                             <FaShippingFast className="text-3xl mx-auto my-auto md:mx-0" />
                             <p className="line-clamp-3 leading-5 uppercase font-bold text-center my-auto mx-0">Solicite a coleta de Roupas</p>
                         </Link>
+                        <Link href={'/usuario'} className="col-start-1 col-end-3 bg-azul-escuro py-2 md:py-4">
+                            <p className="line-clamp-3 leading-5 uppercase font-bold text-center my-auto mx-0">Crie sua conta agora e aproveite todas as nossas vantagens!</p>
+                        </Link>
                     </div>
                 </div>
             </BackgroundBeamsWithCollision>

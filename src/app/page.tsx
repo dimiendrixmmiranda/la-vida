@@ -10,7 +10,7 @@ import FAQ from "@/components/faq/FAQ";
 
 export default async function Page() {
 	return (
-		<Template>
+		<Template ondaInvertida={true}>
 			<TelaInicial />
 			<SobreLaVida />
 			<Vantagens />

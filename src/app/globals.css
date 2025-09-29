@@ -29,7 +29,7 @@
   --salmao: #f8726b;
 }
 
-body {
+*{
   scroll-behavior: smooth;
 }
 

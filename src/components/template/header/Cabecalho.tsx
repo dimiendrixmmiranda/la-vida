@@ -1,21 +1,12 @@
 'use client'
-import { usePathname } from "next/navigation";
 import RedesSociais from "@/components/redesSociais/RedesSociais";
 import SidebarComponent from "@/components/sidebarComponent/SidebarComponent";
-import menuItems from "@/lib/constants/menuItems";
 import Image from "next/image";
 import Link from "next/link";
+import { useMenuItems } from "@/lib/constants/menuItems";
 
 export default function Cabecalho() {
-    const pathname = usePathname();
-
-    // Tabela de regras de redirecionamento
-    const specialLinks: Record<string, { home: string; other: string }> = {
-        FAQ: { home: "#faq", other: "/faq" },
-        Contato: { home: "#contato", other: "/contato" },
-        // você pode adicionar mais aqui
-        // Exemplo: "Serviços": { home: "#servicos", other: "/servicos" }
-    };
+    const menuItems = useMenuItems("/contato", "/faq");
 
     return (
         <header className="absolute top-0 left-0 w-full z-10 p-2 flex text-white xl:p-4">
@@ -28,21 +19,20 @@ export default function Cabecalho() {
 
             <nav className="hidden gap-1 h-fit my-auto z-40 lg:flex lg:flex-1 lg:justify-center xl:gap-2">
                 {menuItems.map((item, idx) => {
-                    // Se o item estiver na tabela, aplica a regra
-                    const rule = specialLinks[item.label];
-                    const href = rule
-                        ? pathname === "/" ? rule.home : rule.other
-                        : item.href;
-
+                    console.log(item)
                     return (
                         <div key={idx} className="relative group h-fit">
                             {!item.children ? (
                                 <Link
-                                    href={href || "/"}
+                                    href={item.href}
                                     className="h-fit self-center text-sm p-2 flex items-center gap-2 font-bold transition-all duration-300 hover:bg-azul-escuro xl:text-base 2xl:text-lg"
                                 >
-                                    {item.icon}
-                                    {item.label}
+                                    <div className="w-[16px] h-[16px]">
+                                        {item.icon}
+                                    </div>
+                                    <p>
+                                        {item.label}
+                                    </p>
                                 </Link>
                             ) : (
                                 <>
