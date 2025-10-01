@@ -19,7 +19,6 @@ export default function Cabecalho() {
 
             <nav className="hidden gap-1 h-fit my-auto z-40 lg:flex lg:flex-1 lg:justify-center xl:gap-2">
                 {menuItems.map((item, idx) => {
-                    console.log(item)
                     return (
                         <div key={idx} className="relative group h-fit">
                             {!item.children ? (

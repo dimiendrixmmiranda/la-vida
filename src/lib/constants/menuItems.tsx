@@ -8,7 +8,7 @@ import { MdContactPhone, MdMiscellaneousServices } from "react-icons/md";
 
 export function useMenuItems(linkContato: string, linkFAQ: string) {
     const { usuario } = useAuth();
-    console.log(usuario)
+
     return [
         { label: "Home", icon: <FaHouseChimney />, href: "/" },
         {

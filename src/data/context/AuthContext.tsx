@@ -4,7 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation'; // Usando o useRouter corretamente
 import { User, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth"; // Importando funções de autenticação
 import Cookies from 'js-cookie';
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/firebase";
 import { Usuario } from "@/lib/interfaces/Usuario";
 
@@ -14,30 +14,31 @@ interface AuthContextProps {
     carregando?: boolean
     login?: (email: string, senha: string) => Promise<void>;
     logout?: (encaminhamento: string) => Promise<void>;
-    cadastrar?: (email: string, senha: string, nome: string, sexo: string, telefone: string) => Promise<void>;
+    cadastrar?: (email: string, senha: string, nome: string, sexo: string, telefone: string, data: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps>({});
 
-async function usuarioNormalizado(usuarioFirebase: User): Promise<Usuario> {
-    const token = await usuarioFirebase.getIdToken();
-    const userDoc = await getDoc(doc(db, "usuarios", usuarioFirebase.uid));
+// async function usuarioNormalizado(usuarioFirebase: User): Promise<Usuario> {
+//     const token = await usuarioFirebase.getIdToken();
+//     const userDoc = await getDoc(doc(db, "usuarios", usuarioFirebase.uid));
 
-    const data = userDoc.exists() ? userDoc.data() : {};
+//     const data = userDoc.exists() ? userDoc.data() : {};
 
-    return {
-        uid: usuarioFirebase.uid,
-        provedor: usuarioFirebase.providerData[0]?.providerId || "",
-        token,
-        nome: data.nome || usuarioFirebase.displayName || "",
-        email: data.email || usuarioFirebase.email || "",
-        sexo: data.sexo || "",
-        imagemURL: data.imagemURL || usuarioFirebase.photoURL || "",
-        dataNascimento: data.data || null || '',
-        telefone: data.telefone || null || '',
-        endereco: data.endereco || null || '',
-    }
-}
+//     return {
+//         uid: usuarioFirebase.uid,
+//         provedor: usuarioFirebase.providerData[0]?.providerId || "",
+//         token,
+//         nome: data.nome || usuarioFirebase.displayName || "",
+//         email: data.email || usuarioFirebase.email || "",
+//         sexo: data.sexo || "",
+//         imagemURL: data.imagemURL || usuarioFirebase.photoURL || "",
+//         dataNascimento: data.data || null || '',
+//         telefone: data.telefone || null || '',
+//         enderecoPrincipalId: data.enderecoPrincipalId || null,
+//         preferencias: data.preferencias || null,
+//     }
+// }
 
 export function AuthProvider({ children }: AuthContextProps) {
     const [carregando, setCarregando] = useState(true)
@@ -46,16 +47,38 @@ export function AuthProvider({ children }: AuthContextProps) {
 
     async function configurarSessao(usuarioFirebase: User | null) {
         if (usuarioFirebase && usuarioFirebase.email) {
-            const usuario = await usuarioNormalizado(usuarioFirebase)
-            setUsuario(usuario)
-            gerenciarCookie(true)
-            setCarregando(false)
-            return usuario.email
+            const usuarioRef = doc(db, "usuarios", usuarioFirebase.uid);
+
+            // 🔥 Escuta em tempo real o documento do usuário
+            onSnapshot(usuarioRef, async (snapshot) => {
+                if (snapshot.exists()) {
+                    const dados = snapshot.data();
+                    const token = await usuarioFirebase.getIdToken();
+
+                    setUsuario({
+                        uid: usuarioFirebase.uid,
+                        provedor: usuarioFirebase.providerData[0]?.providerId || "",
+                        token,
+                        nome: dados.nome || usuarioFirebase.displayName || "",
+                        email: dados.email || usuarioFirebase.email || "",
+                        sexo: dados.sexo || "",
+                        imagemURL: dados.imagemURL || usuarioFirebase.photoURL || "",
+                        dataNascimento: dados.data || null || '',
+                        telefone: dados.telefone || null || '',
+                        enderecoPrincipalId: dados.enderecoPrincipalId || null,
+                        preferencias: dados.preferencias || null,
+                    });
+                }
+            });
+
+            gerenciarCookie(true);
+            setCarregando(false);
+            return usuarioFirebase.email;
         } else {
-            gerenciarCookie(false)
-            setUsuario(null)
-            setCarregando(false)
-            return false
+            gerenciarCookie(false);
+            setUsuario(null);
+            setCarregando(false);
+            return false;
         }
     }
 
@@ -97,7 +120,7 @@ export function AuthProvider({ children }: AuthContextProps) {
     }
 
 
-    async function cadastrar(email: string, senha: string, nome: string, sexo: string, telefone: string) {
+    async function cadastrar(email: string, senha: string, nome: string, sexo: string, telefone: string, data: string) {
         try {
             setCarregando(true)
             const result = await createUserWithEmailAndPassword(auth, email, senha)
@@ -110,6 +133,9 @@ export function AuthProvider({ children }: AuthContextProps) {
                 email,
                 sexo,
                 telefone,
+                data,
+                enderecoPrincipalId: null,
+                preferencias: null,
                 imagemURL: "/default/usuario-padrao.png",
                 tipo: "usuario",
             })

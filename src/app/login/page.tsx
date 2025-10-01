@@ -3,8 +3,8 @@ import Template from "@/components/template/Template";
 
 export default function Page() {
     return (
-        <Template ondaInvertida={false}>
-            <div className="min-h-screen bg-azul flex justify-center items-center pt-[64px] pb-[100px] -mb-24">
+        <Template ondaInvertida={true}>
+            <div className="min-h-screen bg-azul flex justify-center items-center pt-[64px] pb-[100px] -mb-16 lg:-mb-24">
                 <Formulario />
             </div>
         </Template>

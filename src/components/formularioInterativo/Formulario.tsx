@@ -14,6 +14,7 @@ export default function Formulario() {
     const [telefone, setTelefone] = useState('')
     const [erro, setErro] = useState<string | null>(null)
     const [sexo, setSexo] = useState('')
+    const [data, setData] = useState('')
     const { cadastrar, login } = useAuth()
     
     function exibirErro(msg: string, tempoEmSegundos: number = 5) {
@@ -37,7 +38,7 @@ export default function Formulario() {
             return
         }
         try {
-            await cadastrar(email, senha, nome, sexo, telefone)
+            await cadastrar(email, senha, nome, sexo, telefone, data)
             limparVariosInputs([setNome, setEmail, setSenha, setConfirmacaoSenha])
         } catch (error) {
             console.error("Erro ao cadastrar:", error)
@@ -66,7 +67,7 @@ export default function Formulario() {
     console.log(erro)
     return (
         <section className="p-4 max-w-[700px] mx-auto overflow-hidden lg:max-w-[1200px]" >
-            <div className="flex flex-col gap-2 w-full h-[800px] bg-zinc-900 text-white p-4 relative overflow-hidden sm:h-[800px] md:h-[920px] md:p-8 lg:h-[520px] lg:grid lg:grid-cols-2 lg:gap-8 lg:p-8" style={{ borderRadius: '16px', boxShadow: '0 0 4px 2px black' }}>
+            <div className="flex flex-col gap-2 w-full h-[940px] bg-zinc-900 text-white p-4 relative overflow-hidden sm:h-[940px] md:h-[1050px] md:p-8 lg:h-[600px] lg:grid lg:grid-cols-2 lg:gap-8 lg:p-8" style={{ borderRadius: '16px', boxShadow: '0 0 4px 2px black' }}>
                 <div className="flex flex-col w-full h-full z-10 lg:p-8">
                     <div className={`${active === 'cadastro' ? 'hidden' : 'flex'} flex-col gap-4 my-auto md:gap-6`}>
                         <div className="relative w-[150px] h-[150px] hidden mx-auto lg:block">
@@ -104,6 +105,7 @@ export default function Formulario() {
                             <input type="password" placeholder="Senha..." className="p-2 h-[35px] overflow-hidden text-black" value={senha} onChange={(e) => setSenha(e.target.value)} style={{ borderRadius: '12px', boxShadow: '0 0 2px 1px black' }} />
                             <input type="password" placeholder="Confirme sua senha..." className="p-2 h-[35px] overflow-hidden text-black" value={confirmacaoSenha} onChange={(e) => setConfirmacaoSenha(e.target.value)} style={{ borderRadius: '12px', boxShadow: '0 0 2px 1px black' }} />
                             <input type="text" placeholder="Telefone..." className="p-2 h-[35px] overflow-hidden text-black" value={telefone} onChange={(e) => setTelefone(e.target.value)} style={{ borderRadius: '12px', boxShadow: '0 0 2px 1px black' }} />
+                            <input type="date" placeholder="Data de Nascimento..." className="p-2 h-[35px] overflow-hidden text-black" value={data} onChange={(e) => setData(e.target.value)} style={{ borderRadius: '12px', boxShadow: '0 0 2px 1px black' }} />
                             <div className="flex gap-4" style={{ textShadow: "1px 1px 2px black" }}>
                                 <label>Informe o sexo:</label>
 

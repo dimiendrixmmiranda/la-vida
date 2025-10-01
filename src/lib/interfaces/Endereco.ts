@@ -1,8 +1,13 @@
-export default interface Endereco{
+export default interface Endereco {
+    id: string
+    bairro: string
+    nomeEndereco: string
     rua: string
     numero: string
-    bairro: string
+    cidade: string
+    estado: string
+    cep: string
+    nome: string
     complemento: string
     pontoDeReferencia: string
-    cidade: string
 }

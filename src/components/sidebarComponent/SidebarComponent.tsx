@@ -68,7 +68,12 @@ export default function SidebarComponent() {
                                         className="text-[1em] p-2 flex items-center gap-2 font-bold sm:text-xl"
                                         onClick={() => setVisibleRight(false)}
                                     >
-                                        {item.icon}{item.label}
+                                        <div className='flex items-center gap-2'>
+                                            <div className='w-6 h-6 relative'>
+                                                {item.icon}
+                                            </div>
+                                            <p>{item.label}</p>
+                                        </div>
                                     </Link>
                                 )
                             )

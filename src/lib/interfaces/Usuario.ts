@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore"
-import Endereco from "./Endereco"
+import Preferencias from "./Preferencias"
 
 export type Usuario = {
     uid: string
@@ -10,6 +10,7 @@ export type Usuario = {
     imagemURL: string
     sexo: string
     telefone: string
-    endereco: Endereco | null
     dataNascimento?: string | Timestamp
+    enderecoPrincipalId: string
+    preferencias: Preferencias
 }
