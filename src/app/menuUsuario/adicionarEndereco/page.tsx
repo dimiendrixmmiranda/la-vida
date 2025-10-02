@@ -1,4 +1,5 @@
 'use client'
+import Botao from "@/components/botao/Botao";
 import CaixaDeDialogo from "@/components/caixaDeDialogo/CaixaDeDialogo";
 import FormularioAdicionarEndereco from "@/components/formularioAdicionarEndereco/FormularioAdicionarEndereco";
 import Template from "@/components/template/Template";
@@ -6,9 +7,8 @@ import useAuth from "@/data/hooks/useAuth";
 import { db } from "@/lib/firebase/firebase";
 import Endereco from "@/lib/interfaces/Endereco";
 import { collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 import { IoMdCheckmarkCircle, IoMdReturnLeft } from "react-icons/io";
 
 export default function Page() {
@@ -156,12 +156,10 @@ export default function Page() {
                         >
                             Adicionar Novo Endereço
                         </button>
-                        <Link href={'/usuario'} className="bg-laranja text-center uppercase font-bold text-lg w-fit p-2 ml-auto flex justify-center items-center gap-2 xl:mb-16" style={{boxShadow: '0px 0px 2px 1px black', textShadow: '1px 1px 2px black'}}>
-                            <IoMdReturnLeft className="text-lg" />
-                            <p>
-                                Voltar
-                            </p>
-                        </Link>
+                        <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                            <Botao cor="bg-orange-500" texto="Voltar" icone={<IoMdReturnLeft className="text-lg" />} link="/usuario" />
+                            <Botao cor="bg-orange-500" texto="Fazer Pedido" icone={<FaPlusCircle className="text-lg" />} link="/menuUsuario/novoPedido" />
+                        </div>
                         <FormularioAdicionarEndereco
                             visibleFormularioEndereco={visibleFormularioEndereco}
                             setVisibleFormularioEndereco={setVisibleFormularioEndereco}

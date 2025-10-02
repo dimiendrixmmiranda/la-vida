@@ -2,12 +2,19 @@
 import Template from "@/components/template/Template";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
 import useAuth from "@/data/hooks/useAuth";
-import { FaUserAlt, FaBoxOpen, FaCheckCircle, FaMapMarkerAlt, FaTshirt, FaHeadset } from "react-icons/fa";
+import { FaUserAlt, FaBoxOpen, FaMapMarkerAlt, FaTshirt, FaHeadset, FaPlusCircle } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
 
 export default function Page() {
     const { logout, usuario } = useAuth()
     const projects = [
+        {
+            title: "Fazer um Pedido",
+            description:
+                "Inicie um novo pedido de forma rápida e prática, selecionando os serviços e produtos que deseja contratar.",
+            link: "/menuUsuario/novoPedido",
+            icon: <FaPlusCircle className="text-5xl" />
+        },
         {
             title: "Meu Perfil",
             description:
@@ -16,18 +23,11 @@ export default function Page() {
             icon: <FaUserAlt className="text-5xl" />
         },
         {
-            title: "Pedidos em Aberto",
+            title: "Pedidos",
             description:
-                "Confira todos os pedidos que ainda estão em andamento, acompanhe o status de cada um e verifique prazos de entrega.",
-            link: "",
+                "Confira todos os pedidos realizados, acompanhe o status, veja os detalhes e mantenha o histórico das suas compras.",
+            link: "/menuUsuario/pedidos",
             icon: <FaBoxOpen className="text-5xl" />
-        },
-        {
-            title: "Pedidos Concluídos",
-            description:
-                "Visualize todos os pedidos finalizados, com detalhes de produtos, datas e histórico de compras anteriores.",
-            link: "",
-            icon: <FaCheckCircle className="text-5xl" />
         },
         {
             title: "Adicionar Endereço",
@@ -62,7 +62,7 @@ export default function Page() {
                     <button
                         className="flex justify-center items-center bg-red-500 py-2 text-2xl font-black gap-2"
                         onClick={() => logout && logout('/')}
-                        style={{boxShadow: '0 0 3px 2px black', textShadow: '1px 1px 2px black'}}
+                        style={{ boxShadow: '0 0 3px 2px black', textShadow: '1px 1px 2px black' }}
                     >
                         <IoLogOut />
                         <p>Logout</p>
