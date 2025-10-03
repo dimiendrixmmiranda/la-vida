@@ -4,11 +4,12 @@ import Main from "./main/Main";
 interface TemplateProps {
     children: React.ReactNode
     ondaInvertida: boolean
+    paginaHome?: boolean
 }
-export default function Template({children, ondaInvertida}:TemplateProps){
+export default function Template({children, ondaInvertida, paginaHome = false}:TemplateProps){
     return (
         <>
-            <Cabecalho/>
+            <Cabecalho paginaHome={paginaHome}/>
             <Main>
                 {
                     children

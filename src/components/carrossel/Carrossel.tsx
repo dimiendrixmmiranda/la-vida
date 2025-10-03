@@ -11,7 +11,7 @@ import { CometCard } from "@/components/ui/comet-card";
 
 export default function Carrossel() {
     return (
-        <div className="w-full max-w-6xl mx-auto p-4 xl:max-w-[1400px] faq">
+        <div className="w-full max-w-[1500px] p-4 faq">
             <Swiper
                 modules={[Navigation, Pagination, Autoplay, A11y]}
                 spaceBetween={16}

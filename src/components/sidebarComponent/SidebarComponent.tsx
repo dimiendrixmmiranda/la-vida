@@ -6,6 +6,7 @@ import { Accordion, AccordionTab } from 'primereact/accordion';
 import Link from 'next/link';
 import RedesSociais from '../redesSociais/RedesSociais';
 import { useMenuItems } from '@/lib/constants/menuItems';
+import useAuth from '@/data/hooks/useAuth';
 
 interface MenuItem {
     label: string
@@ -14,9 +15,14 @@ interface MenuItem {
     children?: MenuItem[]
 }
 
-export default function SidebarComponent() {
+interface SidebarComponentProps {
+    paginaHome: boolean
+}
+
+export default function SidebarComponent({ paginaHome }: SidebarComponentProps) {
+    const { usuario } = useAuth()
     const [visibleRight, setVisibleRight] = useState(false);
-    const menuItems = useMenuItems("/contato", "/faq");
+    const menuItems = useMenuItems(`${paginaHome ? '#contato' : '/contato'}`, `${paginaHome ? '#faq' : '/faq'}`, `${usuario ? '/menuUsuario/novoPedido' : '/login'}`);
 
     // Header genérico para itens do Accordion
     const accordionHeader = (item: MenuItem) => (

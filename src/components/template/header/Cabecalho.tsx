@@ -4,12 +4,18 @@ import SidebarComponent from "@/components/sidebarComponent/SidebarComponent";
 import Image from "next/image";
 import Link from "next/link";
 import { useMenuItems } from "@/lib/constants/menuItems";
+import useAuth from "@/data/hooks/useAuth";
 
-export default function Cabecalho() {
-    const menuItems = useMenuItems("/contato", "/faq");
+interface CabecalhoProps {
+    paginaHome: boolean
+}
+
+export default function Cabecalho({ paginaHome }: CabecalhoProps) {
+    const { usuario } = useAuth()
+    const menuItems = useMenuItems(`${paginaHome ? '#contato' : '/contato'}`, `${paginaHome ? '#faq' : '/faq'}`, `${usuario ? '/menuUsuario/novoPedido' : '/login'}`);
 
     return (
-        <header className="absolute top-0 left-0 w-full z-10 p-2 flex text-white xl:p-4">
+        <header className="absolute top-0 left-0 w-full z-30 p-2 flex text-white xl:p-4">
             <Link href={'/'} className="flex items-center gap-2 flex-1 lg:flex-none">
                 <div className="w-12 h-12 relative">
                     <Image alt="Logo da Lavanderia La Vida" src={'/logo-la-vida-header.png'} fill className="object-contain" />
@@ -41,7 +47,7 @@ export default function Cabecalho() {
                                         {item.icon}
                                         {item.label}
                                     </button>
-                                    <div className="absolute left-0 hidden group-hover:block bg-azul-escuro rounded-lg shadow-lg z-40">
+                                    <div className="absolute left-0 hidden group-hover:block bg-azul-escuro rounded-lg shadow-lg">
                                         <ul className="flex flex-col">
                                             {item.children.map((child, cidx) => (
                                                 <li key={cidx}>
@@ -65,7 +71,7 @@ export default function Cabecalho() {
             <div className="flex self-center">
                 <RedesSociais mobile={false} />
             </div>
-            <SidebarComponent />
+            <SidebarComponent paginaHome={paginaHome}/>
         </header>
     )
 }

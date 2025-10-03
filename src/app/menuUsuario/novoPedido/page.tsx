@@ -84,13 +84,13 @@ export default function Page() {
                                 <p>unidades</p>
                             </fieldset>
                             <fieldset className="flex items-center gap-2">
-                                <label htmlFor="blusaMoletomSueter">Blusa Moletom ou Suéter</label>
-                                <input className="w-[50px] text-black text-center" style={{ borderRadius: '6px' }} type="text" name="blusaMoletomSueter" id="blusaMoletomSueter" value={blusaMoletomSueter} onChange={(e) => setBlusaMoletomSueter(e.target.value)} />
+                                <label htmlFor="blusa-moletom-sueter">Blusa Moletom ou Suéter</label>
+                                <input className="w-[50px] text-black text-center" style={{ borderRadius: '6px' }} type="text" name="blusa-moletom-sueter" id="blusa-moletom-sueter" value={blusaMoletomSueter} onChange={(e) => setBlusaMoletomSueter(e.target.value)} />
                                 <p>unidades</p>
                             </fieldset>
                             <fieldset className="flex items-center gap-2">
-                                <label htmlFor="jaquetaCasaco">Jaqueta ou Casaco</label>
-                                <input className="w-[50px] text-black text-center" style={{ borderRadius: '6px' }} type="text" name="jaquetaCasaco" id="jaquetaCasaco" value={jaquetaCasaco} onChange={(e) => setJaquetaCasaco(e.target.value)} />
+                                <label htmlFor="jaqueta-casaco">Jaqueta ou Casaco</label>
+                                <input className="w-[50px] text-black text-center" style={{ borderRadius: '6px' }} type="text" name="jaqueta-casaco" id="jaqueta-casaco" value={jaquetaCasaco} onChange={(e) => setJaquetaCasaco(e.target.value)} />
                                 <p>unidades</p>
                             </fieldset>
                             <fieldset className="flex items-center gap-2">
@@ -99,8 +99,8 @@ export default function Page() {
                                 <p>unidades</p>
                             </fieldset>
                             <fieldset className="flex items-center gap-2">
-                                <label htmlFor="roupasIntimas">Roupas Íntimas</label>
-                                <input className="w-[50px] text-black text-center" style={{ borderRadius: '6px' }} type="text" name="roupasIntimas" id="roupasIntimas" value={roupasIntimas} onChange={(e) => setRoupasIntimas(e.target.value)} />
+                                <label htmlFor="roupas-intimas">Roupas Íntimas</label>
+                                <input className="w-[50px] text-black text-center" style={{ borderRadius: '6px' }} type="text" name="roupas-intimas" id="roupas-intimas" value={roupasIntimas} onChange={(e) => setRoupasIntimas(e.target.value)} />
                                 <p>unidades</p>
                             </fieldset>
                             <fieldset className="flex items-center gap-2">

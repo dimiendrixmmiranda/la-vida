@@ -6,7 +6,7 @@ import { FaQuestionCircle, FaUserAlt } from "react-icons/fa";
 import { FaHouseChimney } from "react-icons/fa6";
 import { MdContactPhone, MdMiscellaneousServices } from "react-icons/md";
 
-export function useMenuItems(linkContato: string, linkFAQ: string) {
+export function useMenuItems(linkContato: string, linkFAQ: string, agendamento: string) {
     const { usuario } = useAuth();
 
     return [
@@ -30,7 +30,7 @@ export function useMenuItems(linkContato: string, linkFAQ: string) {
             ) : <FaUserAlt />,
             href: `${usuario != null ? '/usuario' : '/login'}`
         },
-        { label: "Agendamento/Solicite Coleta", icon: <AiTwotoneSchedule />, href: `/` },
+        { label: "Pedidos", icon: <AiTwotoneSchedule />, href: agendamento },
         { label: "Contato", icon: <MdContactPhone />, href: linkContato },
         { label: "FAQ", icon: <FaQuestionCircle />, href: linkFAQ },
     ];
