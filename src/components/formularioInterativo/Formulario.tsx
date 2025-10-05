@@ -12,7 +12,7 @@ export default function Formulario() {
     const [senha, setSenha] = useState('')
     const [confirmacaoSenha, setConfirmacaoSenha] = useState('')
     const [telefone, setTelefone] = useState('')
-    const [erro, setErro] = useState<string | null>(null)
+    const [, setErro] = useState<string | null>(null)
     const [sexo, setSexo] = useState('')
     const [data, setData] = useState('')
     const { cadastrar, login } = useAuth()
@@ -64,7 +64,6 @@ export default function Formulario() {
             exibirErro("Falha no login. Verifique as credenciais.")
         }
     }
-    console.log(erro)
     return (
         <section className="max-w-[700px] mx-auto overflow-hidden lg:max-w-[1200px]" style={{ borderRadius: '16px' }}>
             <div className="flex flex-col gap-2 w-full h-[940px] bg-zinc-900 text-white p-4 relative overflow-hidden sm:h-[940px] md:h-[1050px] md:p-8 lg:h-[600px] lg:grid lg:grid-cols-2 lg:gap-8 lg:p-8" style={{ boxShadow: '0 0 4px 2px black' }}>

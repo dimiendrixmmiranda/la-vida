@@ -13,4 +13,5 @@ export type Usuario = {
     dataNascimento?: string | Timestamp
     enderecoPrincipalId: string
     preferencias: Preferencias
+    tipo: string
 }

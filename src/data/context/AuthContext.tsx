@@ -4,7 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation'; // Usando o useRouter corretamente
 import { User, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth"; // Importando funções de autenticação
 import Cookies from 'js-cookie';
-import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/firebase";
 import { Usuario } from "@/lib/interfaces/Usuario";
 
@@ -49,11 +49,12 @@ export function AuthProvider({ children }: AuthContextProps) {
         if (usuarioFirebase && usuarioFirebase.email) {
             const usuarioRef = doc(db, "usuarios", usuarioFirebase.uid);
 
-            // 🔥 Escuta em tempo real o documento do usuário
-            onSnapshot(usuarioRef, async (snapshot) => {
+            setCarregando(true);
+
+            const unsubscribe = onSnapshot(usuarioRef, async (snapshot) => {
                 if (snapshot.exists()) {
-                    const dados = snapshot.data();
-                    const token = await usuarioFirebase.getIdToken();
+                    const dados = snapshot.data()
+                    const token = await usuarioFirebase.getIdToken()
 
                     setUsuario({
                         uid: usuarioFirebase.uid,
@@ -63,24 +64,31 @@ export function AuthProvider({ children }: AuthContextProps) {
                         email: dados.email || usuarioFirebase.email || "",
                         sexo: dados.sexo || "",
                         imagemURL: dados.imagemURL || usuarioFirebase.photoURL || "",
-                        dataNascimento: dados.data || null || '',
-                        telefone: dados.telefone || null || '',
+                        dataNascimento: dados.data || "",
+                        telefone: dados.telefone || "",
                         enderecoPrincipalId: dados.enderecoPrincipalId || null,
                         preferencias: dados.preferencias || null,
+                        tipo: dados.tipo || "usuario", // 👈 importante
                     });
-                }
-            });
 
-            gerenciarCookie(true);
-            setCarregando(false);
-            return usuarioFirebase.email;
+                    gerenciarCookie(true)
+                    setCarregando(false)
+                } else {
+                    setUsuario(null)
+                    gerenciarCookie(false)
+                    setCarregando(false)
+                }
+            })
+
+            return () => unsubscribe()
         } else {
-            gerenciarCookie(false);
-            setUsuario(null);
-            setCarregando(false);
-            return false;
+            gerenciarCookie(false)
+            setUsuario(null)
+            setCarregando(false)
+            return false
         }
     }
+
 
     async function logout(encaminhamento: string) {
         try {
@@ -100,7 +108,17 @@ export function AuthProvider({ children }: AuthContextProps) {
             const user = result.user;
 
             await configurarSessao(user)
-            router.push('/usuario')
+
+            // pega o tipo direto do Firestore
+            const docSnap = await getDoc(doc(db, "usuarios", user.uid))
+            const dados = docSnap.data()
+            const tipo = dados?.tipo || "usuario"
+
+            if (tipo === "administrador") {
+                router.push("/administrador")
+            } else {
+                router.push("/usuario")
+            }
         } catch (error) {
             console.error("Erro ao autenticar:", error);
             throw error;

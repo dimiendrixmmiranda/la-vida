@@ -1,4 +1,5 @@
 'use client'
+import RotaProtegida from "@/components/rotaProtegida/RotaProtegida";
 import Template from "@/components/template/Template";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
 import useAuth from "@/data/hooks/useAuth";
@@ -7,6 +8,7 @@ import { IoLogOut } from "react-icons/io5";
 
 export default function Page() {
     const { logout, usuario } = useAuth()
+    console.log(usuario)
     const projects = [
         {
             title: "Fazer um Pedido",
@@ -52,23 +54,25 @@ export default function Page() {
         },
     ]
     return (
-        <Template ondaInvertida={true}>
-            <div className="min-h-screen bg-azul flex justify-center text-white p-4 -mb-16 pb-24 md:-mb-20 lg:-mb-24">
-                <div className="mt-[80px] flex flex-col gap-4 xl:gap-8">
-                    <h2 className="uppercase text-3xl text-center xl:text-5xl">Bem vindo <b>{usuario?.nome.split(' ')[0]}</b> <b>{usuario?.nome.split(' ')[usuario?.nome.split(' ').length - 1]}</b></h2>
-                    <div className="max-w-5xl mx-auto">
-                        <HoverEffect items={projects} />
+        <RotaProtegida permitido="usuario">
+            <Template ondaInvertida={true}>
+                <div className="min-h-screen bg-azul flex justify-center text-white p-4 -mb-16 pb-24 md:-mb-20 lg:-mb-24">
+                    <div className="mt-[80px] flex flex-col gap-4 xl:gap-8">
+                        <h2 className="uppercase text-3xl text-center xl:text-5xl">Bem vindo <b>{usuario?.nome.split(' ')[0]}</b> <b>{usuario?.nome.split(' ')[usuario?.nome.split(' ').length - 1]}</b></h2>
+                        <div className="max-w-5xl mx-auto">
+                            <HoverEffect items={projects} />
+                        </div>
+                        <button
+                            className="flex justify-center items-center bg-red-500 py-2 text-2xl font-black gap-2"
+                            onClick={() => logout && logout('/')}
+                            style={{ boxShadow: '0 0 3px 2px black', textShadow: '1px 1px 2px black' }}
+                        >
+                            <IoLogOut />
+                            <p>Logout</p>
+                        </button>
                     </div>
-                    <button
-                        className="flex justify-center items-center bg-red-500 py-2 text-2xl font-black gap-2"
-                        onClick={() => logout && logout('/')}
-                        style={{ boxShadow: '0 0 3px 2px black', textShadow: '1px 1px 2px black' }}
-                    >
-                        <IoLogOut />
-                        <p>Logout</p>
-                    </button>
                 </div>
-            </div>
-        </Template>
+            </Template>
+        </RotaProtegida>
     )
 }
