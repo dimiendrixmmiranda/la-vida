@@ -66,7 +66,7 @@ export default function Page() {
             <Template ondaInvertida={true}>
                 <div className="min-h-screen bg-azul flex justify-center text-white p-4 -mb-16 lg:-mb-24">
                     <div className="mt-[80px] flex flex-col gap-4 text-white w-full h-full max-w-[1000px] xl:gap-8">
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-4 z-30">
                             <h3 className="uppercase font-black text-3xl leading-8" style={{ textShadow: '1px 1px 2px black' }}>Meus Enderecos Cadastrados:</h3>
                             <div>
                                 <ul className="flex flex-col gap-4 md:grid md:grid-cols-2">
@@ -153,7 +153,7 @@ export default function Page() {
                                     setEnderecoSelecionado(null)
                                     setVisibleFormularioEndereco(true)
                                 }}
-                                className="uppercase font-bold text-lg text-center bg-azul-escuro p-2 text-white mt-2"
+                                className="uppercase font-bold text-lg text-center bg-preto p-2 text-white mt-2"
                                 style={{ textShadow: '1px 1px 2px black' }}
                             >
                                 Adicionar Novo Endereço

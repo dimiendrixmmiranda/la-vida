@@ -2,6 +2,7 @@ import { Timestamp } from "firebase/firestore"
 import Endereco from "./Endereco"
 import ListaDePecas from "./ListaDePecas"
 import Preferencias from "./Preferencias"
+import { PrecoPedido } from "./PrecoPedido"
 
 export default interface PedidoAdministrador {
     condicoesDasPecas: string
@@ -17,4 +18,6 @@ export default interface PedidoAdministrador {
     servicoDesejado: string
     status: string
     usuarioId: string
+    metodoDePagamento: string
+    totalAPagar: PrecoPedido
 }

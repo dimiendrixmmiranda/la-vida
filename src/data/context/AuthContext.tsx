@@ -68,7 +68,7 @@ export function AuthProvider({ children }: AuthContextProps) {
                         telefone: dados.telefone || "",
                         enderecoPrincipalId: dados.enderecoPrincipalId || null,
                         preferencias: dados.preferencias || null,
-                        tipo: dados.tipo || "usuario", // 👈 importante
+                        tipo: dados.tipo || "usuario"
                     });
 
                     gerenciarCookie(true)

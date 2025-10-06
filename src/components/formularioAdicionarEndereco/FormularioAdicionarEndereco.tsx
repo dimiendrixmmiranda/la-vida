@@ -109,8 +109,8 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
     }
 
     return (
-        <form className={`${visibleFormularioEndereco ? 'flex' : 'hidden'} flex-col gap-3 bg-azul-escuro text-white p-4 fixed top-[50%] left-[50%] w-[95%] h-[95%] overflow-y-scroll z-20 max-w-[450px] rounded-lg`} style={{ transform: 'translate(-50%, -50%)' }}>
-            <div className="flex">
+        <form className={`${visibleFormularioEndereco ? 'flex md:grid md:grid-cols-2' : 'hidden'} flex-col gap-3 bg-azul-escuro text-white p-4 fixed top-[50%] left-[50%] w-[95%] overflow-y-scroll z-20 max-w-[450px] rounded-lg md:overflow-hidden md:max-w-[700px] lg:max-w-[900px] lg:gap-x-8 lg:gap-y-5`} style={{ transform: 'translate(-50%, -50%)' }}>
+            <div className="flex md:col-start-1 md:col-end-3 h-fit">
                 <h2 className="flex-1 uppercase font-bold">Adicionar Novo Endereço:</h2>
                 <button className="text-2xl" onClick={(e) => {
                     e.preventDefault()
@@ -119,7 +119,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                     <TiDelete />
                 </button>
             </div>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="nomeEndereco">Nome do Endereço:</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -131,7 +131,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                     onChange={(e) => setNomeEndereco(e.target.value)}
                 />
             </fieldset>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="cep">CEP:</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -143,7 +143,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                 />
                 <Link href={'/'} className="text-xs underline mt-1 w-fit">Não sei meu cep</Link>
             </fieldset>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="nome">Nome Completo do Destinatário:</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -154,7 +154,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                     onChange={(e) => setNome(e.target.value)}
                 />
             </fieldset>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="rua">Nome da Rua:</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -165,7 +165,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                     onChange={(e) => setRua(e.target.value)}
                 />
             </fieldset>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="numero">Numero Da Casa:</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -176,7 +176,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                     onChange={(e) => setNumero(e.target.value)}
                 />
             </fieldset>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="bairro">Bairro</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -187,7 +187,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                     onChange={(e) => setBairro(e.target.value)}
                 />
             </fieldset>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="complemento">Complemento do Endereço (Opcional):</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -198,7 +198,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                     onChange={(e) => setComplemento(e.target.value)}
                 />
             </fieldset>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="pontoDeReferencia">Ponto de Referencia (Opcional):</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -209,7 +209,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                     onChange={(e) => setPontoDeReferencia(e.target.value)}
                 />
             </fieldset>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="estado">Estado:</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -220,7 +220,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                     onChange={(e) => setEstado(e.target.value)}
                 />
             </fieldset>
-            <fieldset className="flex flex-col">
+            <fieldset className="flex flex-col h-fit">
                 <label htmlFor="cidade">Cidade:</label>
                 <input
                     className="h-[30px] p-2 text-black rounded-md"
@@ -232,9 +232,9 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                 />
             </fieldset>
 
-            <div className="flex flex-col gap-2 md:grid md:grid-cols-2">
+            <div className="flex flex-col gap-2 md:grid md:grid-cols-2 md:col-start-1 md:col-end-3 md:gap-4 lg:gap-8">
                 <button
-                    className="bg-green-600 uppercase font-bold py-1"
+                    className="bg-green-600 uppercase font-bold py-1 md:p-2"
                     style={{ textShadow: '1px 1px 2px black' }}
                     onClick={(e) => handleSalvar(e)}
                 >
@@ -242,7 +242,7 @@ export default function FormularioAdicionarEndereco({ visibleFormularioEndereco,
                 </button>
                 <button
                     type="button"
-                    className="bg-red-600 uppercase font-bold py-1"
+                    className="bg-red-600 uppercase font-bold py-1 md:p-2"
                     style={{ textShadow: '1px 1px 2px black' }}
                     onClick={(e) => {
                         e.preventDefault()

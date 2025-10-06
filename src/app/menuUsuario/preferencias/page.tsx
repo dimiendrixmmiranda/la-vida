@@ -200,7 +200,7 @@ export default function Page() {
                                 </select>
                             </fieldset>
 
-                            <button className="bg-laranja py-2 font-bold uppercase col-start-1 col-end-3 text-xl" style={{ textShadow: '1px 1px 2px black', boxShadow: '1px 1px 3px 2px black' }} type="submit">Salvar Alterações</button>
+                            <button className="bg-preto py-2 font-bold uppercase col-start-1 col-end-3 text-xl" style={{ textShadow: '1px 1px 2px black', boxShadow: '1px 1px 3px 2px black' }} type="submit">Salvar Alterações</button>
                         </form>
                         <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                             <Botao cor="bg-orange-500" texto="Voltar" icone={<IoMdReturnLeft className="text-lg" />} link="/usuario" />

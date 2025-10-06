@@ -5,6 +5,7 @@ import useAuth from "@/data/hooks/useAuth";
 import { usePedidosAdministrador } from "@/data/hooks/usePedidosAdministrador";
 import { db } from "@/lib/firebase/firebase";
 import PedidoAdministrador from "@/lib/interfaces/PedidoAdministrador";
+import { filtrarDetalhamento } from "@/lib/utils/filtrarDetalhamento";
 import formatarData from "@/lib/utils/formatarData";
 import { doc, updateDoc } from "firebase/firestore";
 import { Dialog } from 'primereact/dialog';
@@ -17,7 +18,6 @@ export default function Page() {
     const [visible, setVisible] = useState(false);
     const [visibleStatus, setVisibleStatus] = useState(false);
     const statusOptions = ['Em Lavagem', 'Pronto para Entrega/Coleta', 'Pedido Recebido', 'Entregue'];
-
 
     async function alterarStatus(pedidoId: string, novoStatus: string, usuarioId: string) {
         try {
@@ -58,10 +58,12 @@ export default function Page() {
                                                 <p>Situação: {pedido.status}</p>
                                                 <p>Email: {pedido.emailUsuario}</p>
                                                 <p>Serviço Desejado: {pedido.servicoDesejado}</p>
+                                                <p className="uppercase"><strong className="capitalize">Método de pagamento:</strong> {pedido.metodoDePagamento}</p>
+                                                <p className="uppercase"><strong className="capitalize">Total à pagar:</strong> R${pedido.totalAPagar.total.toFixed(2)}</p>
                                             </div>
                                             <div className="flex flex-col sm:grid grid-cols-2 gap-2">
                                                 <button
-                                                className="bg-amarelo p-2 uppercase font-bold"
+                                                    className="bg-amarelo p-2 uppercase font-bold"
                                                     onClick={() => {
                                                         setVisible(true)
                                                         setPedidoAtual(pedido)
@@ -70,7 +72,7 @@ export default function Page() {
                                                     Detalhes
                                                 </button>
                                                 <button
-                                                className="bg-blue-700 p-2 uppercase font-bold"
+                                                    className="bg-blue-700 p-2 uppercase font-bold"
                                                     onClick={() => {
                                                         setVisibleStatus(true)
                                                         setPedidoAtual(pedido)
@@ -87,7 +89,7 @@ export default function Page() {
                         <button className="uppercase font-bold text-2xl text-center bg-red-600 p-2" onClick={() => logout && logout('/')}>sair</button>
                     </div>
                     {/* dialog de detalhes */}
-                    <Dialog header={`Pedido ${pedidoAtual?.id}`} visible={visible} onHide={() => { if (!visible) return; setVisible(false); }} className="w-full max-w-[95%]">
+                    <Dialog header={`Pedido ${pedidoAtual?.id}`} visible={visible} onHide={() => { if (!visible) return; setVisible(false); }} className="w-full max-w-[95%] md:max-w-[700px]">
                         <div className="flex flex-col gap-4">
                             <div className="flex flex-col gap-1">
                                 <h2 className="text-xl font-bold">Detalhes:</h2>
@@ -106,6 +108,28 @@ export default function Page() {
                                             .join(", ")
                                     }
                                 </p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-xl font-bold uppercase"><strong className="capitalize">Método de pagamento:</strong> {pedidoAtual?.metodoDePagamento}</p>
+                                <p className="text-xl font-bold"><strong>Total: </strong>R${pedidoAtual?.totalAPagar.total.toFixed(2)}</p>
+                                <div>
+                                    <h2>Detalhes:</h2>
+                                    {
+                                        pedidoAtual?.totalAPagar?.detalhamento && (
+                                            <ul className="list-disc ml-4">
+                                                {Object.entries(
+                                                    filtrarDetalhamento(pedidoAtual.totalAPagar.detalhamento)
+                                                ).map(([item, valor]) => (
+                                                    <li key={item} className="flex items-center gap-2">
+                                                        <p>{item}:</p>
+                                                        <span>R$ {valor.toFixed(2)}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )
+                                    }
+                                </div>
+
                             </div>
                             <div className="flex flex-col gap-1">
                                 <h2 className="text-xl font-bold">Preferências:</h2>

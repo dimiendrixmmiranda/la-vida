@@ -15,6 +15,8 @@ import { db } from "@/lib/firebase/firebase";
 import ListaDePecas from "@/lib/interfaces/ListaDePecas";
 import { useRouter } from "next/navigation";
 import RotaProtegida from "@/components/rotaProtegida/RotaProtegida";
+import calcularPreco from "@/lib/utils/calcularPreco";
+import { PrecoPedido } from "@/lib/interfaces/PrecoPedido";
 
 export default function Page() {
     const enderecos = useEnderecos()
@@ -22,6 +24,8 @@ export default function Page() {
     const preferencias = usePreferencias()
     const [enderecoPrincipal, setEnderecoPrincipal] = useState<Endereco | null>(null)
     const [showDialog, setShowDialog] = useState(false)
+    const [metodoDePagamento, setMetodoDePagamento] = useState('')
+    const [totalAPagar, setTotalAPagar] = useState<PrecoPedido | null>(null)
     const router = useRouter()
 
     const initialForm: ListaDePecas = {
@@ -91,6 +95,7 @@ export default function Page() {
 
     const handleConfirmClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
+        setTotalAPagar(calcularPreco(form))
         setShowDialog(true)
     }
 
@@ -104,7 +109,23 @@ export default function Page() {
             alert("Você precisa ter um endereço principal cadastrado.");
             return;
         }
+        if (!preferencias) {
+            alert("Você precisa setar suas preferências antes de fechar um pedido!");
+            return;
+        }
 
+        if (!form.servicoDesejado) {
+            alert("Informe o serviço desejado!");
+            return;
+        }
+        if (!form.condicoesDasPecas) {
+            alert("Informe as condições da peça!");
+            return;
+        }
+        if (!metodoDePagamento) {
+            alert("Informe um método de pagamento válido!");
+            return;
+        }
         try {
             const pedidoBase = {
                 usuarioId: usuario.uid,
@@ -128,6 +149,8 @@ export default function Page() {
                 servicoDesejado: form.servicoDesejado,
                 condicoesDasPecas: form.condicoesDasPecas,
                 observacoes: form.observacoes,
+                metodoDePagamento: metodoDePagamento,
+                totalAPagar: totalAPagar,
                 status: "em lavagem",
                 dataCriacao: serverTimestamp(),
                 dataAtualizacao: serverTimestamp(),
@@ -272,7 +295,7 @@ export default function Page() {
                     </div>
                 </div>
 
-                <Dialog header="Confirme seu pedido" visible={showDialog} onHide={() => setShowDialog(false)} modal className="max-w-[95%] w-full md:max-w-[700px]">
+                <Dialog header="Confirme seu pedido" visible={showDialog} onHide={() => setShowDialog(false)} modal className="max-w-[95%] w-full md:max-w-[850px]">
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
                             <h2 className="text-xl font-bold">Informações do Pedido:</h2>
@@ -293,30 +316,69 @@ export default function Page() {
                                 <li><p>Observações: <b>{form.observacoes}</b></p></li>
                             </ul>
                         </div>
-
                         <div className="flex flex-col gap-2">
-                            <h2 className="text-xl font-bold">Endereço Principal Selecionado:</h2>
-                            <div>
-                                <h3>{enderecoPrincipal?.rua}, {enderecoPrincipal?.numero}</h3>
-                                <span className="flex leading-5">{enderecoPrincipal?.bairro} - {enderecoPrincipal?.complemento} - {enderecoPrincipal?.cep} - {enderecoPrincipal?.cidade} - {enderecoPrincipal?.pontoDeReferencia}</span>
-                                <p className="flex leading-5">{enderecoPrincipal?.nomeEndereco} - {enderecoPrincipal?.nome}</p>
-                            </div>
-                            <div className="text-white max-w-[300px] w-full ml-auto">
-                                <Botao cor="bg-orange-500" texto="Ver Endereços" icone={<FaLocationDot className="text-lg" />} link="/menuUsuario/adicionarEndereco" />
-                            </div>
+                            <h2 className="text-xl font-bold">Total do Pedido:</h2>
+                            <p className="text-lg font-black">R${totalAPagar?.total.toFixed(2)}</p>
                         </div>
-
                         <div className="flex flex-col gap-2">
-                            <h2 className="text-xl font-bold">Preferências:</h2>
-                            <div className="flex flex-col md:grid md:grid-cols-2">
-                                {preferencias && Object.entries(preferencias).map(([chave, valor]) => (
-                                    <p key={chave}>{chave}: {valor}</p>
-                                ))}
-                            </div>
-                            <div className="text-white max-w-[300px] w-full ml-auto">
-                                <Botao cor="bg-orange-500" texto="Ver Preferências" icone={<FaCogs className="text-lg" />} link="/menuUsuario/preferencias" />
-                            </div>
+                            <h2 className="text-xl font-bold">Método de Pagamento:</h2>
+                            <select name="metodoDePagamento" id="metodoDePagamento" value={metodoDePagamento} onChange={(e) => setMetodoDePagamento(e.target.value)} className="border-2 border-zinc-500 p-1" style={{ borderRadius: '8px' }}>
+                                <option value="">Selecione:</option>
+                                <option value="pix">Pix</option>
+                                <option value="dinheiro">Dinheiro</option>
+                                <option value="cartao-de-credito">Cartão de Crédito</option>
+                                <option value="cartao-de-debito">Cartão de Débito</option>
+                            </select>
                         </div>
+                        {
+                            enderecoPrincipal ? (
+                                <div className="flex flex-col gap-2">
+                                    <h2 className="text-xl font-bold">Endereço Principal Selecionado:</h2>
+                                    <div>
+                                        <h3>{enderecoPrincipal?.rua}, {enderecoPrincipal?.numero}</h3>
+                                        <span className="flex leading-5">{enderecoPrincipal?.bairro} - {enderecoPrincipal?.complemento} - {enderecoPrincipal?.cep} - {enderecoPrincipal?.cidade} - {enderecoPrincipal?.pontoDeReferencia}</span>
+                                        <p className="flex leading-5">{enderecoPrincipal?.nomeEndereco} - {enderecoPrincipal?.nome}</p>
+                                    </div>
+                                    <div className="text-white max-w-[300px] w-full ml-auto">
+                                        <Botao cor="bg-orange-500" texto="Ver Endereços" icone={<FaLocationDot className="text-lg" />} link="/menuUsuario/adicionarEndereco" />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-6">
+                                    <h2 className="text-xl font-bold my-auto">
+                                        Selecione Um endereço Principal!
+                                    </h2>
+                                    <div className="text-white w-full">
+                                        <Botao cor="bg-orange-500" texto="Ver Endereços" icone={<FaLocationDot className="text-lg" />} link="/menuUsuario/adicionarEndereco" />
+                                    </div>
+                                </div>
+                            )
+                        }
+
+                        {
+                            preferencias ? (
+                                <div className="flex flex-col gap-2">
+                                    <h2 className="text-xl font-bold">Preferências:</h2>
+                                    <div className="flex flex-col md:grid md:grid-cols-2">
+                                        {preferencias && Object.entries(preferencias).map(([chave, valor]) => (
+                                            <p key={chave}>{chave}: {valor}</p>
+                                        ))}
+                                    </div>
+                                    <div className="text-white max-w-[300px] w-full ml-auto">
+                                        <Botao cor="bg-orange-500" texto="Ver Preferências" icone={<FaCogs className="text-lg" />} link="/menuUsuario/preferencias" />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-6">
+                                    <h2 className="text-xl font-bold my-auto">
+                                        Selecione às preferências de lavagem!
+                                    </h2>
+                                    <div className="text-white w-full">
+                                        <Botao cor="bg-orange-500" texto="Ver Preferências" icone={<FaCogs className="text-lg" />} link="/menuUsuario/preferencias" />
+                                    </div>
+                                </div>
+                            )
+                        }
 
                         <div className="grid grid-cols-2 gap-2 md:gap-6">
                             <button style={{ textShadow: '0 0 2px 1px black', boxShadow: '0px 0px 2px 1px black' }} className="bg-red-600 uppercase font-black text-lg leading-6 p-2 text-white" onClick={() => setShowDialog(false)}>Revisar Pedido</button>
