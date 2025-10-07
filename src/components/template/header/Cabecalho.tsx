@@ -42,7 +42,7 @@ export default function Cabecalho({ paginaHome }: CabecalhoProps) {
                             ) : (
                                 <>
                                     <button
-                                        className="h-fit self-center text-sm p-2 flex items-center gap-2 font-bold transition-all duration-300 hover:bg-azul-escuro xl:text-base 2xl:text-lg"
+                                        className="h-fit self-center text-sm p-2 flex items-center gap-2 font-bold transition-all duration-300 group-hover:bg-azul-escuro hover:bg-azul-escuro xl:text-base 2xl:text-lg"
                                     >
                                         {item.icon}
                                         {item.label}
@@ -53,8 +53,9 @@ export default function Cabecalho({ paginaHome }: CabecalhoProps) {
                                                 <li key={cidx}>
                                                     <Link
                                                         href={child.href}
-                                                        className="block px-4 py-2 hover:bg-azul-medio whitespace-nowrap z-40"
+                                                        className="px-4 py-2 hover:bg-azul-medio whitespace-nowrap z-40 flex items-center gap-2"
                                                     >
+                                                        {child.icon}
                                                         {child.label}
                                                     </Link>
                                                 </li>

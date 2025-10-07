@@ -16,12 +16,11 @@ export default function Page() {
     const [visible, setVisible] = useState(false);
     const [pedidoAtual, setPedidoAtual] = useState<PedidoUsuario | null>(null)
     const pedidos = usePedidosUsuario()
-    const statusOptions = ['Pedido Recebido', 'Entregue'];
+    const statusOptions = ['Selecione', 'Entregue'];
     const [visibleStatus, setVisibleStatus] = useState(false);
     const [pedidosConcluidos, setPedidosConcluidos] = useState<PedidoUsuario[] | null>(null)
     const [pedidosEmAberto, setPedidosEmAberto] = useState<PedidoUsuario[] | null>(null)
-    console.log(pedidosEmAberto)
-    console.log(pedidosConcluidos)
+
     useEffect(() => {
         const pedidosConcluidos = pedidos.filter(pedido => pedido.status == "Pedido Recebido" || pedido.status == "Entregue")
         setPedidosConcluidos(pedidosConcluidos)
