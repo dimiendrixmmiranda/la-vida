@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import RotaProtegida from "@/components/rotaProtegida/RotaProtegida";
 import calcularPreco from "@/lib/utils/calcularPreco";
 import { PrecoPedido } from "@/lib/interfaces/PrecoPedido";
+import { initMercadoPago, Wallet } from "@mercadopago/sdk-react"
 
 export default function Page() {
     const enderecos = useEnderecos()
@@ -26,7 +27,12 @@ export default function Page() {
     const [showDialog, setShowDialog] = useState(false)
     const [metodoDePagamento, setMetodoDePagamento] = useState('')
     const [totalAPagar, setTotalAPagar] = useState<PrecoPedido | null>(null)
+    const [preferenceId, setPreferenceId] = useState<string | null>(null);
     const router = useRouter()
+
+    useEffect(() => {
+        initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY!, { locale: 'pt-BR' });
+    }, []);
 
     const initialForm: ListaDePecas = {
         camisas: "0",
@@ -99,83 +105,85 @@ export default function Page() {
         setShowDialog(true)
     }
 
+
     const handleFinalConfirm = async () => {
-        if (!usuario) {
-            alert("Usuário não autenticado.");
+        if (!usuario || !enderecoPrincipal || !preferencias || !form.servicoDesejado || !form.condicoesDasPecas) {
+            alert("Preencha todos os campos obrigatórios!");
             return;
         }
 
-        if (!enderecoPrincipal) {
-            alert("Você precisa ter um endereço principal cadastrado.");
-            return;
+        if (metodoDePagamento === "pix" || metodoDePagamento === "cartao-de-credito" || metodoDePagamento === "cartao-de-debito") {
+            try {
+                const res = await fetch("/api/pagamento", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ totalAPagar }),
+                });
+                
+                const data = await res.json();
+                console.log("Preference ID:", data.id);
+                if (data.id) {
+                    setPreferenceId(data.id);
+                } else {
+                    alert("Erro ao criar pagamento Mercado Pago.");
+                }
+            } catch (error) {
+                console.error("Erro no pagamento:", error);
+            }
+        } else {
+            // Fluxo normal: pagamento em dinheiro
+            await salvarPedidoNoFirestore();
         }
-        if (!preferencias) {
-            alert("Você precisa setar suas preferências antes de fechar um pedido!");
-            return;
-        }
+    };
 
-        if (!form.servicoDesejado) {
-            alert("Informe o serviço desejado!");
-            return;
-        }
-        if (!form.condicoesDasPecas) {
-            alert("Informe as condições da peça!");
-            return;
-        }
-        if (!metodoDePagamento) {
-            alert("Informe um método de pagamento válido!");
-            return;
-        }
+    const salvarPedidoNoFirestore = async () => {
         try {
-            const pedidoBase = {
-                usuarioId: usuario.uid,
-                nomeUsuario: usuario.nome ?? "Usuário",
-                emailUsuario: usuario.email,
-                endereco: enderecoPrincipal,
-                preferencias: preferencias || {},
-                pecas: {
-                    camisas: Number(form.camisas),
-                    calca: Number(form.calca),
-                    vestido: Number(form.vestido),
-                    terno: Number(form.terno),
-                    toalha: Number(form.toalha),
-                    roupaDeCama: Number(form.roupaDeCama),
-                    blusaMoletomSueter: Number(form.blusaMoletomSueter),
-                    jaquetaCasaco: Number(form.jaquetaCasaco),
-                    shorts: Number(form.shorts),
-                    roupasIntimas: Number(form.roupasIntimas),
-                    meias: Number(form.meias),
-                },
-                servicoDesejado: form.servicoDesejado,
-                condicoesDasPecas: form.condicoesDasPecas,
-                observacoes: form.observacoes,
-                metodoDePagamento: metodoDePagamento,
-                totalAPagar: totalAPagar,
-                status: "em lavagem",
-                dataCriacao: serverTimestamp(),
-                dataAtualizacao: serverTimestamp(),
-            };
+            if (usuario != null) {
+                const pedidoBase = {
+                    usuarioId: usuario.uid,
+                    nomeUsuario: usuario.nome ?? "Usuário",
+                    emailUsuario: usuario.email,
+                    endereco: enderecoPrincipal,
+                    preferencias,
+                    pecas: {
+                        camisas: Number(form.camisas),
+                        calca: Number(form.calca),
+                        vestido: Number(form.vestido),
+                        terno: Number(form.terno),
+                        toalha: Number(form.toalha),
+                        roupaDeCama: Number(form.roupaDeCama),
+                        blusaMoletomSueter: Number(form.blusaMoletomSueter),
+                        jaquetaCasaco: Number(form.jaquetaCasaco),
+                        shorts: Number(form.shorts),
+                        roupasIntimas: Number(form.roupasIntimas),
+                        meias: Number(form.meias),
+                    },
+                    servicoDesejado: form.servicoDesejado,
+                    condicoesDasPecas: form.condicoesDasPecas,
+                    observacoes: form.observacoes,
+                    metodoDePagamento,
+                    totalAPagar,
+                    status: "em lavagem",
+                    dataCriacao: serverTimestamp(),
+                    dataAtualizacao: serverTimestamp(),
+                };
 
-            // cria o pedido na coleção geral
-            const pedidoRef = await addDoc(collection(db, "pedidos"), pedidoBase);
+                const pedidoRef = await addDoc(collection(db, "pedidos"), pedidoBase);
+                await updateDoc(pedidoRef, { id: pedidoRef.id });
+                await setDoc(doc(db, "usuarios", usuario.uid, "pedidos", pedidoRef.id), {
+                    ...pedidoBase,
+                    id: pedidoRef.id,
+                });
 
-            // adiciona o id ao mesmo pedido
-            const pedidoComId = { ...pedidoBase, id: pedidoRef.id };
-            await updateDoc(pedidoRef, { id: pedidoRef.id });
-
-            // salva o mesmo pedido dentro do usuário (com id incluso)
-            await setDoc(doc(db, "usuarios", usuario.uid, "pedidos", pedidoRef.id), pedidoComId);
-
-            // limpa storage e form
-            localStorage.removeItem(storageKey);
-            setForm(initialForm);
-            setShowDialog(false);
-
-            alert("Pedido realizado com sucesso!");
-            router.push('/menuUsuario/pedidos')
+                localStorage.removeItem(storageKey);
+                setForm(initialForm);
+                setShowDialog(false);
+                alert("Pedido realizado com sucesso!");
+                router.push("/menuUsuario/pedidos");
+            }
         } catch (error) {
             console.error("Erro ao salvar pedido:", error);
-            alert("Ocorreu um erro ao salvar o pedido. Tente novamente.");
+            alert("Erro ao salvar pedido.");
         }
     };
 
@@ -320,6 +328,7 @@ export default function Page() {
                             <h2 className="text-xl font-bold">Total do Pedido:</h2>
                             <p className="text-lg font-black">R${totalAPagar?.total.toFixed(2)}</p>
                         </div>
+                        {/* Pagemento mercado pago */}
                         <div className="flex flex-col gap-2">
                             <h2 className="text-xl font-bold">Método de Pagamento:</h2>
                             <select name="metodoDePagamento" id="metodoDePagamento" value={metodoDePagamento} onChange={(e) => setMetodoDePagamento(e.target.value)} className="border-2 border-zinc-500 p-1" style={{ borderRadius: '8px' }}>
@@ -329,6 +338,11 @@ export default function Page() {
                                 <option value="cartao-de-credito">Cartão de Crédito</option>
                                 <option value="cartao-de-debito">Cartão de Débito</option>
                             </select>
+                            {preferenceId && (
+                                <div className="mt-4">
+                                    <Wallet initialization={{ preferenceId }} />
+                                </div>
+                            )}
                         </div>
                         {
                             enderecoPrincipal ? (
