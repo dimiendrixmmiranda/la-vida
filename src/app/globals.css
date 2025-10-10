@@ -116,3 +116,9 @@
   height: 240px;
   border-radius: 70% 30% 60% 40% / 40% 60% 30% 70%;
 }
+
+
+/* index para dialog */
+.p-dialog-mask{
+  z-index: 30!important;
+}

@@ -18,6 +18,7 @@ import RotaProtegida from "@/components/rotaProtegida/RotaProtegida";
 import calcularPreco from "@/lib/utils/calcularPreco";
 import { PrecoPedido } from "@/lib/interfaces/PrecoPedido";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react"
+import Mensagem from "@/components/mensagem/Mensagem";
 
 export default function Page() {
     const enderecos = useEnderecos()
@@ -25,10 +26,17 @@ export default function Page() {
     const preferencias = usePreferencias()
     const [enderecoPrincipal, setEnderecoPrincipal] = useState<Endereco | null>(null)
     const [showDialog, setShowDialog] = useState(false)
+    const [showDialogPagamento, setShowDialogPagamento] = useState(false)
     const [metodoDePagamento, setMetodoDePagamento] = useState('')
     const [totalAPagar, setTotalAPagar] = useState<PrecoPedido | null>(null)
     const [preferenceId, setPreferenceId] = useState<string | null>(null);
     const router = useRouter()
+
+    // Mensagens
+    const [visiblePreenchaCampos, setVisiblePreenchaCampos] = useState(false)
+    const [visibleErroPagamento, setVisibleErroPagamento] = useState(false)
+    const [visibleSucessoPagamento, setVisibleSucessoPagamento] = useState(false)
+    const [visibleErroSalvarPedido, setVisibleErroSalvarPedido] = useState(false)
 
     useEffect(() => {
         initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY!, { locale: 'pt-BR' });
@@ -108,8 +116,8 @@ export default function Page() {
 
     const handleFinalConfirm = async () => {
         if (!usuario || !enderecoPrincipal || !preferencias || !form.servicoDesejado || !form.condicoesDasPecas) {
-            alert("Preencha todos os campos obrigatórios!");
-            return;
+            setVisiblePreenchaCampos(true)
+            return
         }
 
         if (metodoDePagamento === "pix" || metodoDePagamento === "cartao-de-credito" || metodoDePagamento === "cartao-de-debito") {
@@ -119,13 +127,15 @@ export default function Page() {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ totalAPagar }),
                 });
-                
+
                 const data = await res.json();
                 console.log("Preference ID:", data.id);
                 if (data.id) {
                     setPreferenceId(data.id);
+                    setShowDialog(false);
+                    setShowDialogPagamento(true);
                 } else {
-                    alert("Erro ao criar pagamento Mercado Pago.");
+                    setVisibleErroPagamento(true)
                 }
             } catch (error) {
                 console.error("Erro no pagamento:", error);
@@ -178,12 +188,12 @@ export default function Page() {
                 localStorage.removeItem(storageKey);
                 setForm(initialForm);
                 setShowDialog(false);
-                alert("Pedido realizado com sucesso!");
+                setVisibleSucessoPagamento(true)
                 router.push("/menuUsuario/pedidos");
             }
         } catch (error) {
             console.error("Erro ao salvar pedido:", error);
-            alert("Erro ao salvar pedido.");
+            setVisibleErroSalvarPedido(true)
         }
     };
 
@@ -338,11 +348,6 @@ export default function Page() {
                                 <option value="cartao-de-credito">Cartão de Crédito</option>
                                 <option value="cartao-de-debito">Cartão de Débito</option>
                             </select>
-                            {preferenceId && (
-                                <div className="mt-4">
-                                    <Wallet initialization={{ preferenceId }} />
-                                </div>
-                            )}
                         </div>
                         {
                             enderecoPrincipal ? (
@@ -400,6 +405,60 @@ export default function Page() {
                         </div>
                     </div>
                 </Dialog>
+
+                <Dialog
+                    header="Pagamento"
+                    visible={showDialogPagamento}
+                    onHide={() => setShowDialogPagamento(false)}
+                    modal
+                    className="max-w-[95%] w-full md:max-w-[600px]"
+                >
+                    {preferenceId ? (
+                        <div className="flex flex-col gap-4 items-center">
+                            <h2 className="text-lg font-bold text-center">Finalize o pagamento abaixo:</h2>
+                            <div className="w-full flex justify-center">
+                                <Wallet initialization={{ preferenceId }} />
+                            </div>
+                            <button
+                                onClick={() => {
+                                    setShowDialogPagamento(false);
+                                    salvarPedidoNoFirestore();
+                                }}
+                                className="bg-green-600 uppercase font-black text-lg leading-6 p-2 text-white rounded-md shadow-md hover:bg-green-700 transition-all"
+                            >
+                                Concluir Pedido
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="text-center text-lg font-bold p-4">
+                            Gerando pagamento...
+                        </div>
+                    )}
+                </Dialog>
+                <Mensagem
+                    mensagem="Preencha todos os campos obrigatórios!"
+                    visible={visiblePreenchaCampos}
+                    tipo="erro"
+                    onClose={() => setVisiblePreenchaCampos(false)}
+                />
+                <Mensagem
+                    mensagem="Erro ao criar pagamento Mercado Pago."
+                    visible={visibleErroPagamento}
+                    tipo="erro"
+                    onClose={() => setVisibleErroPagamento(false)}
+                />
+                <Mensagem
+                    mensagem="Pedido realizado com sucesso!"
+                    visible={visibleSucessoPagamento}
+                    tipo="sucesso"
+                    onClose={() => setVisibleSucessoPagamento(false)}
+                />
+                <Mensagem
+                    mensagem="Erro ao salvar pedido."
+                    visible={visibleErroSalvarPedido}
+                    tipo="erro"
+                    onClose={() => setVisibleErroSalvarPedido(false)}
+                />
             </Template>
         </RotaProtegida>
     );
